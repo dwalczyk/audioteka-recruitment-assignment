@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JetBrains\PhpStorm\Pure;
+use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
@@ -16,10 +17,10 @@ class Cart implements \App\Service\Cart\Cart
     public const CAPACITY = 3;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'uuid', nullable: false)]
+    #[ORM\Column(type: UuidType::NAME, nullable: false)]
     private UuidInterface $id;
 
-    #[ORM\ManyToMany(targetEntity: 'Product')]
+    #[ORM\ManyToMany(targetEntity: \App\Entity\Product::class)]
     #[ORM\JoinTable(name: 'cart_products')]
     private Collection $products;
 
