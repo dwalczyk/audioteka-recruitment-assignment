@@ -21,7 +21,7 @@ class Product implements \App\Service\Catalog\Product
     #[ORM\Column(type: Types::INTEGER)]
     private int $price;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
 
     public function __construct(string $id, string $name, int $price)
