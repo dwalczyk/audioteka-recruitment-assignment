@@ -23,6 +23,7 @@ class ProductRepository implements ProductProvider, ProductService
         return $this->repository->createQueryBuilder('p')
             ->setMaxResults($count)
             ->setFirstResult($page * $count)
+            ->orderBy('p.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
         ;
