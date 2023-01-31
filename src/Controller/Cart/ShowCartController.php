@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Cart;
 
 use App\Entity\Cart;
@@ -14,7 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ShowCartController extends AbstractController
 {
-    public function __construct(private CartBuilder $cartBuilder) { }
+    public function __construct(private CartBuilder $cartBuilder)
+    {
+    }
 
     public function __invoke(Cart $cart): Response
     {

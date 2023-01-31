@@ -17,6 +17,12 @@ Przykładowe zapytania (jak komunikować się z serwisem) znajdziesz w [requests
 
 Testy uruchamia polecenie `docker-compose run --rm php php bin/phpunit`
 
+Codesniffer (check): `vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --dry-run --allow-risky=yes --diff --ansi`
+
+Codesniffer (autofix): `vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --allow-risky=yes --ansi`
+
+Phpstan: `vendor/bin/phpstan analyse -c phpstan.neon --no-progress --memory-limit=-1 --ansi`
+
 ## Oryginalne wymagania dotyczące serwisu
 
 Serwis realizuje obsługę katalogu produktów oraz koszyka. Klient serwisu powinien móc:

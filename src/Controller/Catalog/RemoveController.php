@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Catalog;
 
 use App\Entity\Product;
@@ -19,10 +21,10 @@ class RemoveController extends AbstractController implements MessageBusAwareInte
 
     public function __invoke(?Product $product): Response
     {
-        if ($product !== null) {
+        if (null !== $product) {
             $this->dispatch(new RemoveProductFromCatalog($product->getId()));
         }
-        
+
         return new Response('', Response::HTTP_ACCEPTED);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Catalog;
 
 use App\ResponseBuilder\ProductListBuilder;
@@ -10,18 +12,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/products", methods={"GET"}, name="product-list")
- */
+#[Route('products', name: 'product-list', methods: ['GET'])]
 class ListController extends AbstractController
 {
     private const MAX_PER_PAGE = 3;
 
-    public function __construct(private ProductProvider $productProvider, private ProductListBuilder $productListBuilder) { }
+    public function __construct(
+        private readonly ProductProvider $productProvider,
+        private readonly ProductListBuilder $productListBuilder
+    ) {
+    }
 
     public function __invoke(Request $request): Response
     {
-        $page = max(0, (int)$request->get('page', 0));
+        $page = \max(0, (int) $request->get('page', 0));
 
         $products = $this->productProvider->getProducts($page, self::MAX_PER_PAGE);
         $totalCount = $this->productProvider->getTotalCount();

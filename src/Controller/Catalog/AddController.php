@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Catalog;
 
 use App\Messenger\AddProductToCatalog;
@@ -19,14 +21,16 @@ class AddController extends AbstractController implements MessageBusAwareInterfa
 {
     use MessageBusTrait;
 
-    public function __construct(private ErrorBuilder $errorBuilder) { }
+    public function __construct(private ErrorBuilder $errorBuilder)
+    {
+    }
 
     public function __invoke(Request $request): Response
     {
-        $name = trim($request->get('name'));
-        $price = (int)$request->get('price');
+        $name = \trim($request->get('name'));
+        $price = (int) $request->get('price');
 
-        if ($name === '' || $price < 1) {
+        if ('' === $name || $price < 1) {
             return new JsonResponse(
                 $this->errorBuilder->__invoke('Invalid name or price.'),
                 Response::HTTP_UNPROCESSABLE_ENTITY

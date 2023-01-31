@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Service\Catalog\Product;
@@ -36,12 +38,12 @@ class ProductRepository implements ProductProvider, ProductService
 
     public function exists(string $productId): bool
     {
-        return $this->repository->find($productId) !== null;
+        return null !== $this->repository->find($productId);
     }
 
     public function add(string $name, int $price): Product
     {
-        $product = new \App\Entity\Product(Uuid::uuid4(), $name, $price);
+        $product = new \App\Entity\Product(Uuid::uuid4()->toString(), $name, $price);
 
         $this->entityManager->persist($product);
         $this->entityManager->flush();
@@ -52,7 +54,7 @@ class ProductRepository implements ProductProvider, ProductService
     public function remove(string $id): void
     {
         $product = $this->repository->find($id);
-        if ($product !== null) {
+        if (null !== $product) {
             $this->entityManager->remove($product);
             $this->entityManager->flush();
         }

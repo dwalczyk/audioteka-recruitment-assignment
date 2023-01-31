@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Service\Catalog\Product;
@@ -37,9 +39,9 @@ class Cart implements \App\Service\Cart\Cart
 
     public function getTotalPrice(): int
     {
-        return array_reduce(
+        return \array_reduce(
             $this->products->toArray(),
-            static fn(int $total, Product $product): int => $total + $product->getPrice(),
+            static fn (int $total, Product $product): int => $total + $product->getPrice(),
             0
         );
     }
@@ -56,17 +58,17 @@ class Cart implements \App\Service\Cart\Cart
     }
 
     #[Pure]
-    public function hasProduct(\App\Entity\Product $product): bool
+    public function hasProduct(Product $product): bool
     {
         return $this->products->contains($product);
     }
 
-    public function addProduct(\App\Entity\Product $product): void
+    public function addProduct(Product $product): void
     {
         $this->products->add($product);
     }
 
-    public function removeProduct(\App\Entity\Product $product): void
+    public function removeProduct(Product $product): void
     {
         $this->products->removeElement($product);
     }

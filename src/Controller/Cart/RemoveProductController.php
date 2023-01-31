@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Cart;
 
 use App\Entity\Cart;
@@ -20,7 +22,7 @@ class RemoveProductController extends AbstractController implements MessageBusAw
 
     public function __invoke(Cart $cart, ?Product $product): Response
     {
-        if ($product !== null) {
+        if (null !== $product) {
             $this->dispatch(new RemoveProductFromCart($cart->getId(), $product->getId()));
         }
 
