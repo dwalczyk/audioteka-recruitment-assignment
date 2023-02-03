@@ -12,9 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/products/{product}", methods={"DELETE"}, name="product-delete")
- */
+#[Route('/products/{product}', name: 'product-delete', methods: ['DELETE'])]
 class RemoveController extends AbstractController implements MessageBusAwareInterface
 {
     use MessageBusTrait;
@@ -25,6 +23,6 @@ class RemoveController extends AbstractController implements MessageBusAwareInte
             $this->dispatch(new RemoveProductFromCatalog($product->getId()));
         }
 
-        return new Response('', Response::HTTP_ACCEPTED);
+        return new Response(status: Response::HTTP_ACCEPTED);
     }
 }

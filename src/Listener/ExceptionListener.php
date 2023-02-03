@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ExceptionListener
 {
-    public function __construct(private ErrorBuilder $errorBuilder)
+    public function __construct(private readonly ErrorBuilder $errorBuilder)
     {
     }
 

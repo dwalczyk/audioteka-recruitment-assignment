@@ -4,27 +4,25 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Service\Catalog\Product;
-use App\Service\Catalog\ProductProvider;
-use App\Service\Catalog\ProductService;
+use App\Entity\Product;
+use App\Service\Catalog\ProductInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Ramsey\Uuid\Uuid;
 
-class ProductRepository implements ProductProvider, ProductService
+class ProductRepository implements ProductRepositoryInterface
 {
     private EntityRepository $repository;
 
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(private readonly EntityManagerInterface $em)
     {
-        $this->repository = $this->entityManager->getRepository(\App\Entity\Product::class);
+        $this->repository = $this->em->getRepository(Product::class);
     }
 
-    public function getProducts(int $page = 0, int $count = 3): iterable
+    public function pagination(int $page = 1, int $count = 3): iterable
     {
         return $this->repository->createQueryBuilder('p')
             ->setMaxResults($count)
-            ->setFirstResult($page * $count)
+            ->setFirstResult(($page - 1) * $count)
             ->orderBy('p.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
@@ -36,27 +34,23 @@ class ProductRepository implements ProductProvider, ProductService
         return $this->repository->createQueryBuilder('p')->select('count(p.id)')->getQuery()->getSingleScalarResult();
     }
 
-    public function exists(string $productId): bool
+    public function save(ProductInterface $product): void
     {
-        return null !== $this->repository->find($productId);
-    }
-
-    public function add(string $name, int $price): Product
-    {
-        $product = new \App\Entity\Product(Uuid::uuid4()->toString(), $name, $price);
-
-        $this->entityManager->persist($product);
-        $this->entityManager->flush();
-
-        return $product;
-    }
-
-    public function remove(string $id): void
-    {
-        $product = $this->repository->find($id);
-        if (null !== $product) {
-            $this->entityManager->remove($product);
-            $this->entityManager->flush();
+        if (!$this->em->contains($product)) {
+            $this->em->persist($product);
         }
+
+        $this->em->flush();
+    }
+
+    public function find(string $id): ?ProductInterface
+    {
+        return $this->repository->find($id);
+    }
+
+    public function remove(ProductInterface $product): void
+    {
+        $this->em->remove($product);
+        $this->em->flush();
     }
 }

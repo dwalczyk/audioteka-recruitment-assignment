@@ -4,22 +4,24 @@ declare(strict_types=1);
 
 namespace App\ResponseBuilder;
 
-use App\Service\Cart\Cart;
+use App\Service\Cart\CartInterface;
 
 class CartBuilder
 {
-    public function __invoke(Cart $cart): array
+    public function __invoke(CartInterface $cart): array
     {
         $data = [
             'total_price' => $cart->getTotalPrice(),
             'products' => [],
         ];
 
-        foreach ($cart->getProducts() as $product) {
+        foreach ($cart->getItems() as $item) {
             $data['products'][] = [
-                'id' => $product->getId(),
-                'name' => $product->getName(),
-                'price' => $product->getPrice(),
+                'id' => $item->getId(),
+                'productId' => $item->getProduct()->getId(),
+                'name' => $item->getProduct()->getName(),
+                'price' => $item->getPrice(),
+                'quantity' => $item->getQuantity(),
             ];
         }
 

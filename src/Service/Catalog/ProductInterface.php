@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Catalog;
 
-interface Product
+interface ProductInterface
 {
     public function getId(): string;
 
@@ -13,4 +13,8 @@ interface Product
     public function getPrice(): int;
 
     public function getCreatedAt(): \DateTimeImmutable;
+
+    public function updateName(string $name): void;
+
+    public function updatePrice(int $price): void;
 }

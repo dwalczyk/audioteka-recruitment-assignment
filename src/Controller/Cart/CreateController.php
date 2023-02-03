@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Cart;
 
 use App\Messenger\CreateCart;
-use App\Service\Cart\Cart;
+use App\Service\Cart\CartInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,9 +13,7 @@ use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/cart", methods={"POST"}, name="cart-create")
- */
+#[Route('/cart', name: 'cart-create', methods: ['POST'])]
 class CreateController extends AbstractController
 {
     use HandleTrait;
@@ -27,7 +25,7 @@ class CreateController extends AbstractController
 
     public function __invoke(): Response
     {
-        /** @var Cart $cart */
+        /** @var CartInterface $cart */
         $cart = $this->handle(new CreateCart());
 
         return new JsonResponse(['cart_id' => $cart->getId()], Response::HTTP_CREATED);

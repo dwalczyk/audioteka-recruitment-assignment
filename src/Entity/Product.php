@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Service\Catalog\ProductInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidType;
@@ -11,7 +12,7 @@ use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 #[ORM\Entity]
-class Product implements \App\Service\Catalog\Product
+class Product implements ProductInterface
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME)]
@@ -52,5 +53,15 @@ class Product implements \App\Service\Catalog\Product
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function updateName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function updatePrice(int $price): void
+    {
+        $this->price = $price;
     }
 }

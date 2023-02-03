@@ -22,7 +22,7 @@ class ListControllerTest extends WebTestCase
         $response = $this->getJsonResponse();
         self::assertEquals([
             'previous_page' => null,
-            'next_page' => '/products?page=1',
+            'next_page' => '/products?page=2',
             'count' => 7,
             'products' => [
                 [
@@ -46,14 +46,14 @@ class ListControllerTest extends WebTestCase
 
     public function test_shows_middle_page_of_products(): void
     {
-        $this->client->request('GET', '/products?page=1');
+        $this->client->request('GET', '/products?page=2');
 
         self::assertResponseStatusCodeSame(200);
 
         $response = $this->getJsonResponse();
         self::assertEquals([
-            'previous_page' => '/products?page=0',
-            'next_page' => '/products?page=2',
+            'previous_page' => '/products?page=1',
+            'next_page' => '/products?page=3',
             'count' => 7,
             'products' => [
                 [
@@ -77,13 +77,13 @@ class ListControllerTest extends WebTestCase
 
     public function test_shows_last_page_of_products(): void
     {
-        $this->client->request('GET', '/products?page=2');
+        $this->client->request('GET', '/products?page=3');
 
         self::assertResponseStatusCodeSame(200);
 
         $response = $this->getJsonResponse();
         self::assertEquals([
-            'previous_page' => '/products?page=1',
+            'previous_page' => '/products?page=2',
             'next_page' => null,
             'count' => 7,
             'products' => [
@@ -105,7 +105,7 @@ class ListControllerTest extends WebTestCase
         $response = $this->getJsonResponse();
         self::assertEquals([
             'previous_page' => null,
-            'next_page' => '/products?page=1',
+            'next_page' => '/products?page=2',
             'count' => 7,
             'products' => [
                 [
@@ -129,13 +129,13 @@ class ListControllerTest extends WebTestCase
 
     public function test_shows_empty_result_set_if_page_is_beyond_number_of_available_pages(): void
     {
-        $this->client->request('GET', '/products?page=3');
+        $this->client->request('GET', '/products?page=4');
 
         self::assertResponseStatusCodeSame(200);
 
         $response = $this->getJsonResponse();
         self::assertEquals([
-            'previous_page' => '/products?page=2',
+            'previous_page' => '/products?page=3',
             'next_page' => null,
             'count' => 7,
             'products' => []
