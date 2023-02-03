@@ -24,19 +24,25 @@ class ShowCartControllerTest extends WebTestCase
             'total_price' => 10970,
             'products' => [
                 [
-                    'id' => '15e4a636-ef98-445b-86df-46e1cc0e10b5',
-                    'name' => 'Product 3',
-                    'price' => 4990,
-                ],
-                [
-                    'id' => '9670ea5b-d940-4593-a2ac-4589be784203',
+                    'id' => '0575e6f1-5a80-458c-8ce6-ded01b51bdee',
+                    'productId' => '9670ea5b-d940-4593-a2ac-4589be784203',
                     'name' => 'Product 2',
                     'price' => 3990,
+                    'quantity' => 1
                 ],
                 [
-                    'id' => 'fbcb8c51-5dcc-4fd4-a4cd-ceb9b400bff7',
+                    'id' => '49d3f185-d357-47d4-b955-09e40317e4ee',
+                    'productId' => 'fbcb8c51-5dcc-4fd4-a4cd-ceb9b400bff7',
                     'name' => 'Product 1',
                     'price' => 1990,
+                    'quantity' => 1
+                ],
+                [
+                    'id' => 'f0fb56d6-7034-4808-829c-7f1a315a5cd5',
+                    'productId' => '15e4a636-ef98-445b-86df-46e1cc0e10b5',
+                    'name' => 'Product 3',
+                    'price' => 4990,
+                    'quantity' => 1
                 ],
             ]
         ], $response);

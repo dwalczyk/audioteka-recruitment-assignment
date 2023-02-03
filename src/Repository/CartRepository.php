@@ -1,48 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
-use App\Entity\Product;
-use App\Service\Cart\Cart;
-use App\Service\Cart\CartService;
+use App\Entity\Cart;
+use App\Service\Cart\CartInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Ramsey\Uuid\Uuid;
+use Doctrine\Persistence\ObjectRepository;
 
-class CartRepository implements CartService
+final class CartRepository implements CartRepositoryInterface
 {
-    public function __construct(private EntityManagerInterface $entityManager) {}
+    private readonly ObjectRepository $repository;
 
-    public function addProduct(string $cartId, string $productId): void
+    public function __construct(private readonly EntityManagerInterface $em)
     {
-        $cart = $this->entityManager->find(\App\Entity\Cart::class, $cartId);
-        $product = $this->entityManager->find(Product::class, $productId);
-
-        if ($cart && $product && !$cart->hasProduct($product)) {
-            $cart->addProduct($product);
-            $this->entityManager->persist($cart);
-            $this->entityManager->flush();
-        }
+        $this->repository = $em->getRepository(Cart::class);
     }
 
-    public function removeProduct(string $cartId, string $productId): void
+    public function find(string $id): ?CartInterface
     {
-        $cart = $this->entityManager->find(\App\Entity\Cart::class, $cartId);
-        $product = $this->entityManager->find(Product::class, $productId);
-
-        if ($cart && $product && $cart->hasProduct($product)) {
-            $cart->removeProduct($product);
-            $this->entityManager->persist($cart);
-            $this->entityManager->flush();
-        }
+        return $this->repository->find($id);
     }
 
-    public function create(): Cart
+    public function save(CartInterface $cart): void
     {
-        $cart = new \App\Entity\Cart(Uuid::uuid4()->toString());
+        if (!$this->em->contains($cart)) {
+            $this->em->persist($cart);
+        }
 
-        $this->entityManager->persist($cart);
-        $this->entityManager->flush();
-
-        return $cart;
+        $this->em->flush();
     }
 }

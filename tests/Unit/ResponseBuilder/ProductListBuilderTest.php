@@ -47,14 +47,14 @@ class ProductListBuilderTest extends TestCase
 
         $this->assertEquals([
             'previous_page' => null,
-            'next_page' => 'product-list{"page":1}',
+            'next_page' => 'product-list{"page":2}',
             'count' => 5,
             'products' => [
                 ['id' => '25cc9f5d-7702-4cb0-b6fc-f93b049055ca', 'name' => 'Product 1', 'price' => 1200],
                 ['id' => '30e4e028-3b38-4cb9-9267-a9e515983337', 'name' => 'Product 2', 'price' => 1400],
                 ['id' => 'f6635017-982f-4544-9ac5-3d57107c0f0d', 'name' => 'Product 3', 'price' => 1500],
             ],
-        ], $this->builder->__invoke($products, 0, 3, 5));
+        ], $this->builder->__invoke($products, 1, 3, 5));
     }
 
     public function test_builds_last_page(): void
@@ -66,7 +66,7 @@ class ProductListBuilderTest extends TestCase
         ];
 
         $this->assertEquals([
-            'previous_page' => 'product-list{"page":0}',
+            'previous_page' => 'product-list{"page":1}',
             'next_page' => null,
             'count' => 5,
             'products' => [
@@ -74,7 +74,7 @@ class ProductListBuilderTest extends TestCase
                 ['id' => '30e4e028-3b38-4cb9-9267-a9e515983337', 'name' => 'Product 2', 'price' => 1400],
                 ['id' => 'f6635017-982f-4544-9ac5-3d57107c0f0d', 'name' => 'Product 3', 'price' => 1500],
             ],
-        ], $this->builder->__invoke($products, 1, 3, 5));
+        ], $this->builder->__invoke($products, 2, 3, 5));
     }
 
     public function test_builds_middle_page(): void
@@ -86,14 +86,14 @@ class ProductListBuilderTest extends TestCase
         ];
 
         $this->assertEquals([
-            'previous_page' => 'product-list{"page":0}',
-            'next_page' => 'product-list{"page":2}',
+            'previous_page' => 'product-list{"page":1}',
+            'next_page' => 'product-list{"page":3}',
             'count' => 7,
             'products' => [
                 ['id' => '25cc9f5d-7702-4cb0-b6fc-f93b049055ca', 'name' => 'Product 1', 'price' => 1200],
                 ['id' => '30e4e028-3b38-4cb9-9267-a9e515983337', 'name' => 'Product 2', 'price' => 1400],
                 ['id' => 'f6635017-982f-4544-9ac5-3d57107c0f0d', 'name' => 'Product 3', 'price' => 1500],
             ],
-        ], $this->builder->__invoke($products, 1, 3, 7));
+        ], $this->builder->__invoke($products, 2, 3, 7));
     }
 }

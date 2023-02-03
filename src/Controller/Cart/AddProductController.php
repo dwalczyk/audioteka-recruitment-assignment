@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Cart;
 
 use App\Entity\Cart;
@@ -13,14 +15,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/cart/{cart}/{product}", methods={"PUT"}, name="cart-add-product")
- */
+#[Route('/cart/{cart}/{product}', name: 'cart-add-product', methods: ['PUT'])]
 class AddProductController extends AbstractController implements MessageBusAwareInterface
 {
     use MessageBusTrait;
 
-    public function __construct(private ErrorBuilder $errorBuilder) { }
+    public function __construct(private readonly ErrorBuilder $errorBuilder)
+    {
+    }
 
     public function __invoke(Cart $cart, Product $product): Response
     {
@@ -31,8 +33,8 @@ class AddProductController extends AbstractController implements MessageBusAware
             );
         }
 
-        $this->dispatch(new AddProductToCart($cart->getId(), $product->getId()));
+        $this->dispatch(new AddProductToCart($cart->getId(), $product->getId(), 1));
 
-        return new Response('', Response::HTTP_ACCEPTED);
+        return new Response(status: Response::HTTP_ACCEPTED);
     }
 }

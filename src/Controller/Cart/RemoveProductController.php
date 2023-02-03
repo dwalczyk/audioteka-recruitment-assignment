@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Cart;
 
 use App\Entity\Cart;
@@ -11,19 +13,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/cart/{cart}/{product}", methods={"DELETE"}, name="cart-remove-product")
- */
+#[Route('/cart/{cart}/{product}', name: 'cart-remove-product', methods: ['DELETE'])]
 class RemoveProductController extends AbstractController implements MessageBusAwareInterface
 {
     use MessageBusTrait;
 
     public function __invoke(Cart $cart, ?Product $product): Response
     {
-        if ($product !== null) {
+        if (null !== $product) {
             $this->dispatch(new RemoveProductFromCart($cart->getId(), $product->getId()));
         }
 
-        return new Response('', Response::HTTP_ACCEPTED);
+        return new Response(status: Response::HTTP_ACCEPTED);
     }
 }

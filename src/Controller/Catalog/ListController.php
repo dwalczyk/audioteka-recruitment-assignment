@@ -1,30 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Catalog;
 
+use App\Repository\ProductRepositoryInterface;
 use App\ResponseBuilder\ProductListBuilder;
-use App\Service\Catalog\ProductProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/products", methods={"GET"}, name="product-list")
- */
+#[Route('products', name: 'product-list', methods: ['GET'])]
 class ListController extends AbstractController
 {
     private const MAX_PER_PAGE = 3;
 
-    public function __construct(private ProductProvider $productProvider, private ProductListBuilder $productListBuilder) { }
+    public function __construct(
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly ProductListBuilder $productListBuilder
+    ) {
+    }
 
     public function __invoke(Request $request): Response
     {
-        $page = max(0, (int)$request->get('page', 0));
+        $page = \max(1, (int) $request->get('page', 1));
 
-        $products = $this->productProvider->getProducts($page, self::MAX_PER_PAGE);
-        $totalCount = $this->productProvider->getTotalCount();
+        $products = $this->productRepository->pagination($page, self::MAX_PER_PAGE);
+        $totalCount = $this->productRepository->getTotalCount();
 
         return new JsonResponse(
             $this->productListBuilder->__invoke($products, $page, self::MAX_PER_PAGE, $totalCount),
